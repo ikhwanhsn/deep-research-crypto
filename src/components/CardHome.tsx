@@ -1,28 +1,46 @@
 "use client";
 
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 
-const CardHome = ({ title }: { title: string }) => {
+const CardHome = ({ title, data }: { title: string; data: any }) => {
   return (
     <>
-      <CryptoCard title="Bitcoin" />
-      <CryptoCard title="Bitcoin" />
-      <CryptoCard title="Bitcoin" />
-      <CryptoCard title="Bitcoin" />
-      <CryptoCard title="Bitcoin" />
-      <CryptoCard title="Bitcoin" />
-      <CryptoCard title="Bitcoin" />
-      <CryptoCard title="Bitcoin" />
-      <CryptoCard title="Bitcoin" />
-      <CryptoCard title="Bitcoin" />
-      <button className="btn btn-sm w-28 mt-2 mx-auto">Load more</button>
+      {data?.result?.data.length > 0 &&
+        data.result.data.map((item: any) => (
+          <CryptoCard
+            key={item.id}
+            rank={item.cmc_rank}
+            title={item.name}
+            logo={`https://s2.coinmarketcap.com/static/img/coins/64x64/${item.id}.png`}
+            symbol={item.symbol}
+            price={item.quote.USD.price}
+            change={item.quote.USD.percent_change_24h}
+          />
+        ))}
     </>
   );
 };
 
 export default CardHome;
 
-const CryptoCard = ({ title }: { title: string }) => {
+type CryptoCardProps = {
+  rank: number;
+  title: string;
+  logo: string;
+  symbol: string;
+  price: string;
+  change: string;
+};
+
+const CryptoCard = ({
+  rank,
+  title,
+  logo,
+  symbol,
+  price,
+  change,
+}: CryptoCardProps) => {
   const router = useRouter();
   return (
     <section
@@ -30,13 +48,37 @@ const CryptoCard = ({ title }: { title: string }) => {
       onClick={() => router.push("/crypto/detail")}
     >
       <section className="flex gap-2 justify-center items-center">
-        <p className="w-10 h-10 rounded-full bg-gray-300"></p>
+        <p className="opacity-75 text-sm">#{rank}</p>
+        <Image
+          src={logo}
+          alt={title}
+          width={40}
+          height={40}
+          className="rounded-full"
+        />
         <h4>{title}</h4>
-        <p>BTC</p>
+        <p className="opacity-50">{symbol}</p>
       </section>
-      <section>
-        <p>$234.09 -0.21%</p>
+      <section className="flex gap-2">
+        <p>${roundNumber(Number(price))}</p>
+        <p
+          className={`${
+            Number(change) < 0 ? "text-red-500" : "text-green-500"
+          }`}
+        >
+          {roundNumber(Number(change))}%
+        </p>
       </section>
     </section>
   );
+};
+
+const roundNumber = (number: number) => {
+  // if (number < 0.0001) {
+  //   return Math.round(number * 10000000) / 10000000;
+  // }
+  if (number < 1) {
+    return Math.round(number * 10000) / 10000;
+  }
+  return Math.round(number * 100) / 100;
 };
