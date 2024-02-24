@@ -1,6 +1,6 @@
 export const GET = async () => {
   const res = await fetch(
-    `https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest?start=1&limit=25`,
+    `https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest?start=1&limit=5000`,
     {
       method: "GET",
       headers: {
@@ -10,9 +10,15 @@ export const GET = async () => {
   );
   const result = await res.json();
   const data = result.data;
+  const cryptoName = data.map((item: any) => {
+    return {
+      id: item.id,
+      name: item.name,
+    };
+  });
   return new Response(
     JSON.stringify({
-      data,
+      cryptoName,
     }),
     {
       status: 200,

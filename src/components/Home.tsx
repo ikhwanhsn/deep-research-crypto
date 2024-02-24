@@ -19,25 +19,61 @@ const homeMenu = [
 
 const HomeComponent = () => {
   const [isActive, setIsActive] = useState("all");
-  const [dataCrypto, setDataCrypto] = useState([]);
+  const [dataCrypto, setDataCrypto] = useState<any>([]);
+  const [dataFilter, setDataFilter] = useState<any>([]);
+  const [allCrypto, setAllCrypto] = useState([]);
+  const [dataNotFound, setDataNotFound] = useState(false);
   const { data, error, isLoading } = useSWR("/api/allTab", fetcher);
   useEffect(() => {
     if (data) {
-      setDataCrypto(data);
+      setDataCrypto([...dataCrypto, ...data.data]);
     }
-    if (dataCrypto) {
-      console.log(dataCrypto);
+  }, [data]);
+  useEffect(() => {
+    const getData = async () => {
+      const res = await fetch("http://localhost:3000/api/allCrypto");
+      const data = await res.json();
+      setAllCrypto(data.cryptoName);
+    };
+    getData();
+  }, []);
+  const handleInput = (e: any) => {
+    const filter = dataCrypto.filter((crypto: any) => {
+      return crypto.name.toLowerCase().includes(e.target.value.toLowerCase());
+    });
+    if (filter.length === 0) {
+      setDataNotFound(true);
+    } else {
+      setDataNotFound(false);
     }
-  }, [data, dataCrypto]);
+    setDataFilter(filter);
+  };
+
   return (
     <section className="flex flex-col justify-center items-center pt-20">
-      <section className="w-full bg-gray-50 h-36 fixed top-0 z-20"></section>
-      <input
-        type="text"
-        placeholder="Search here..."
-        className="input input-bordered w-full max-w-xs sticky top-20 z-20"
-      />
-      <section className="flex gap-3 bg-gray-50 w-full justify-center py-3 sticky top-32 z-10">
+      <section className="w-full bg-gray-50 h-16 fixed top-0 z-20"></section>
+      <form
+        className="z-20 flex gap-1"
+        onSubmit={(e) => {
+          e.preventDefault();
+          alert("Not yet implemented");
+        }}
+      >
+        <input
+          type="text"
+          placeholder="Search here..."
+          // onChange={(e) => handleInput(e)}
+          list="crypto"
+          className="input input-bordered"
+        />
+        <datalist id="crypto" className="w-full">
+          {allCrypto.map((crypto: any) => {
+            return <option key={crypto.id} value={crypto.name} />;
+          })}
+        </datalist>
+        <button className="btn btn-primary text-white">Search</button>
+      </form>
+      <section className="flex gap-3 bg-gray-50 w-full justify-center py-3 sticky top-16 z-10">
         {homeMenu.map((menu) => {
           return (
             <button
@@ -53,8 +89,15 @@ const HomeComponent = () => {
         })}
       </section>
       <section className="card w-1/2 bg-white p-3 mb-3 flex gap-1">
-        {isActive === "all" && (
-          <CardHome title="All" data={dataCrypto ? dataCrypto : []} />
+        {isLoading && <p className="text-center">Loading...</p>}
+        {dataNotFound && isActive === "all" && (
+          <p className="text-center">Data not found</p>
+        )}
+        {isActive === "all" && !dataNotFound && (
+          <CardHome
+            title="All"
+            data={dataFilter.length > 0 ? dataFilter : dataCrypto}
+          />
         )}
         {isActive === "latest" && <CoomingSoon />}
         {isActive === "favorite" && <CoomingSoon />}
@@ -62,9 +105,14 @@ const HomeComponent = () => {
         {isActive === "watchlist" && <CoomingSoon />}
         {isActive === "new" && <CoomingSoon />}
         {isActive === "support" && <Support />}
-        {dataCrypto.length !== 0 && !isLoading && isActive === "all" && (
-          <button className="btn btn-sm w-28 mt-2 mx-auto">Load more</button>
-        )}
+        {dataCrypto.length > 0 &&
+          !isLoading &&
+          !dataNotFound &&
+          isActive === "all" && (
+            <button className={`btn btn-sm w-28 mt-2 mx-auto`}>
+              Load more
+            </button>
+          )}
       </section>
     </section>
   );

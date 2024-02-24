@@ -6,8 +6,8 @@ import { useRouter } from "next/navigation";
 const CardHome = ({ title, data }: { title: string; data: any }) => {
   return (
     <>
-      {data?.result?.data.length > 0 &&
-        data.result.data.map((item: any) => (
+      {data.length > 0 &&
+        data.map((item: any) => (
           <CryptoCard
             key={item.id}
             rank={item.cmc_rank}
