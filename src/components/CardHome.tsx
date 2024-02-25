@@ -10,6 +10,7 @@ const CardHome = ({ title, data }: { title: string; data: any }) => {
         data.map((item: any) => (
           <CryptoCard
             key={item.id}
+            id={item.id}
             rank={item.cmc_rank}
             title={item.name}
             logo={`https://s2.coinmarketcap.com/static/img/coins/64x64/${item.id}.png`}
@@ -25,6 +26,7 @@ const CardHome = ({ title, data }: { title: string; data: any }) => {
 export default CardHome;
 
 type CryptoCardProps = {
+  id: number;
   rank: number;
   title: string;
   logo: string;
@@ -34,6 +36,7 @@ type CryptoCardProps = {
 };
 
 const CryptoCard = ({
+  id,
   rank,
   title,
   logo,
@@ -45,7 +48,7 @@ const CryptoCard = ({
   return (
     <section
       className="card border shadow-sm py-2 px-3 flex flex-row justify-between items-center cursor-pointer hover:bg-gray-50"
-      onClick={() => router.push("/crypto/detail")}
+      onClick={() => router.push(`/crypto/detail/${id}`)}
     >
       <section className="flex gap-2 justify-center items-center">
         <p className="opacity-75 text-sm">#{rank}</p>
