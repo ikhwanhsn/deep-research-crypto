@@ -2,10 +2,16 @@
 
 import { useEffect, useState } from "react";
 import CoomingSoon from "./CoomingSoon";
+import { TbWorld } from "react-icons/tb";
+import { FaXTwitter } from "react-icons/fa6";
+import { FaTelegramPlane } from "react-icons/fa";
+import { SiCoinmarketcap } from "react-icons/si";
+import coinGecko from "../../public/img/coingecko.png";
+import Image from "next/image";
 
 const menuDetail = ["description", "tokenomics", "research", "others"];
 
-const CryptoDetail = ({ id }: any) => {
+const CryptoDetail = ({ id, web }: any) => {
   const [isActive, setIsActive] = useState("description");
   const [cryptoData, setCryptoData] = useState<any>(null);
 
@@ -23,18 +29,52 @@ const CryptoDetail = ({ id }: any) => {
     <>
       <section className="flex justify-between items-center">
         <section className="flex gap-3">
-          <p className="w-24 h-24 rounded-full bg-gray-300"></p>
+          <Image
+            src={`https://s2.coinmarketcap.com/static/img/coins/64x64/${id}.png`}
+            alt="logo"
+            width={45}
+            height={45}
+            className="w-24 h-24 rounded-full"
+          />
           <section className="flex flex-col gap-2 mt-2">
             <section className="flex gap-2 text-3xl">
               <h3>{cryptoData?.name}</h3>
               <p className="opacity-50">{cryptoData?.symbol}</p>
             </section>
-            <section className="flex gap-2">
-              <p className="h-8 w-8 bg-gray-300 rounded-full"></p>
-              <p className="h-8 w-8 bg-gray-300 rounded-full"></p>
-              <p className="h-8 w-8 bg-gray-300 rounded-full"></p>
-              <p className="h-8 w-8 bg-gray-300 rounded-full"></p>
-              <p className="h-8 w-8 bg-gray-300 rounded-full"></p>
+            <section className="flex gap-3 items-center">
+              <a href="" target="_blank">
+                <TbWorld className="scale-[1.5] hover:scale-[1.6]" />
+              </a>
+              <a href="" target="_blank">
+                <FaXTwitter className="scale-[1.4] hover:scale-[1.5]" />
+              </a>
+              <a href="" target="_blank">
+                <FaTelegramPlane className="scale-[1.5] hover:scale-[1.6]" />
+              </a>
+              <a
+                href={`https://coinmarketcap.com/id/currencies/${cryptoData?.name.replace(
+                  /\s+/g,
+                  "-"
+                )}`}
+                className="ml-1"
+                target="_blank"
+              >
+                <SiCoinmarketcap className="scale-[1.4] hover:scale-[1.5]" />
+              </a>
+              <a
+                href={`https://www.coingecko.com/id/koin_koin/${cryptoData?.name
+                  .toLowerCase()
+                  .replace(/\s+/g, "-")}`}
+                target="_blank"
+              >
+                <Image
+                  src={coinGecko}
+                  alt="coinGecko"
+                  width={23}
+                  height={23}
+                  className="hover:scale-[1.04]"
+                />
+              </a>
             </section>
           </section>
         </section>

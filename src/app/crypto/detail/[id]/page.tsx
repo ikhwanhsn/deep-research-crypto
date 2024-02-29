@@ -35,7 +35,7 @@ const CryptoDetailPage = () => {
           return <h1 key={item}>{item}</h1>;
         })}
       <section className="w-1/2 card mt-3 bg-white mx-auto py-3 px-4">
-        <CryptoDetail id={id} />
+        <CryptoDetail id={id} web={metadaCrypto ? metadaCrypto.website : []} />
       </section>
     </main>
   );
