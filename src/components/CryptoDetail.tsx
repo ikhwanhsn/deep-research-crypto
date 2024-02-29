@@ -1,12 +1,24 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import CoomingSoon from "./CoomingSoon";
 
 const menuDetail = ["description", "tokenomics", "research", "others"];
 
-const CryptoDetail = () => {
+const CryptoDetail = ({ id }: any) => {
   const [isActive, setIsActive] = useState("description");
+  const [cryptoData, setCryptoData] = useState<any>(null);
+
+  useEffect(() => {
+    const getData = async () => {
+      const res = await fetch(`http://localhost:3000/api/tokenByID/${id}`);
+      const data = await res.json();
+      const result = data.response[id];
+      console.log(data.response[id]);
+      setCryptoData(result);
+    };
+    getData();
+  }, []);
   return (
     <>
       <section className="flex justify-between items-center">
@@ -14,8 +26,8 @@ const CryptoDetail = () => {
           <p className="w-24 h-24 rounded-full bg-gray-300"></p>
           <section className="flex flex-col gap-2 mt-2">
             <section className="flex gap-2 text-3xl">
-              <h3>Bitcoin</h3>
-              <p className="opacity-50">BTC</p>
+              <h3>{cryptoData?.name}</h3>
+              <p className="opacity-50">{cryptoData?.symbol}</p>
             </section>
             <section className="flex gap-2">
               <p className="h-8 w-8 bg-gray-300 rounded-full"></p>
@@ -27,11 +39,11 @@ const CryptoDetail = () => {
           </section>
         </section>
         <section className="flex flex-col gap-2 items-center justify-center">
-          <h3 className="text-4xl">$234.09</h3>
+          <h3 className="text-4xl">{cryptoData?.quote.USD.price}</h3>
           <section className="flex gap-1">
-            <p>-0.21%</p>
-            <p>-0.21%</p>
-            <p>-0.21%</p>
+            <p>{cryptoData?.quote.USD.percent_change_1h}%</p>
+            <p>{cryptoData?.quote.USD.percent_change_24h}%</p>
+            <p>{cryptoData?.quote.USD.percent_change_7d}%</p>
           </section>
         </section>
       </section>

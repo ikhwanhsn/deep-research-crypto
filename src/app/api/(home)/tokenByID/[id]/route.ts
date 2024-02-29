@@ -1,8 +1,9 @@
-export const GET = async () => {
+export const GET = async (req: Request) => {
+  const url = req.url;
+  const id = url.substring(url.lastIndexOf("/") + 1);
   const res = await fetch(
-    `https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest?start=1&limit=25`,
+    `https://pro-api.coinmarketcap.com/v2/cryptocurrency/quotes/latest?id=${id}`,
     {
-      method: "GET",
       headers: {
         "X-CMC_PRO_API_KEY": process.env.NEXT_PUBLIC_API_KEY_CMC || "",
       },
@@ -10,10 +11,10 @@ export const GET = async () => {
     }
   );
   const result = await res.json();
-  const data = result.data;
+  const response = result.data;
   return new Response(
     JSON.stringify({
-      data,
+      response,
     }),
     {
       status: 200,
