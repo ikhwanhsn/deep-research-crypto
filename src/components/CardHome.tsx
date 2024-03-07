@@ -50,7 +50,7 @@ const CryptoCard = ({
       className="card border shadow-sm py-2 px-3 flex flex-row justify-between items-center cursor-pointer hover:bg-gray-50"
       onClick={() => router.push(`/crypto/detail/${id}`)}
     >
-      <section className="flex gap-2 justify-center items-center">
+      <section className="flex gap-2 justify-center items-center text-black">
         <p className="opacity-75 text-sm">#{rank}</p>
         <Image
           src={logo}
@@ -62,7 +62,7 @@ const CryptoCard = ({
         <h4>{title}</h4>
         <p className="opacity-50">{symbol}</p>
       </section>
-      <section className="flex gap-2">
+      <section className="flex gap-2 text-black">
         <p>${roundNumber(Number(price))}</p>
         <p
           className={`${

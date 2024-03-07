@@ -73,7 +73,8 @@ const HomeComponent = () => {
           placeholder="Search here..."
           // onChange={(e) => handleInput(e)}
           list="crypto"
-          className="input input-bordered"
+          required
+          className="input bg-white border-2 border-gray-200 text-black"
         />
         <datalist id="crypto" className="w-full">
           {allCrypto.map((crypto: any) => {
@@ -95,7 +96,7 @@ const HomeComponent = () => {
               key={menu}
               onClick={() => setIsActive(menu)}
               className={`capitalize ${
-                menu === "support" ? "text-green-600" : ""
+                menu === "support" ? "text-green-600" : "text-black"
               } ${isActive === menu ? "font-bold" : ""}`}
             >
               {menu}
@@ -103,7 +104,7 @@ const HomeComponent = () => {
           );
         })}
       </section>
-      <section className="card w-1/2 bg-white p-3 mb-3 flex gap-1">
+      <section className="card w-1/2 bg-white p-3 mb-3 flex gap-1 shadow-sm">
         {isLoading && <p className="text-center">Loading...</p>}
         {dataNotFound && isActive === "all" && (
           <p className="text-center">Data not found</p>
@@ -124,7 +125,9 @@ const HomeComponent = () => {
           !isLoading &&
           !dataNotFound &&
           isActive === "all" && (
-            <button className={`btn btn-sm w-28 mt-2 mx-auto`}>
+            <button
+              className={`btn btn-sm w-28 mt-2 mx-auto text-white bg-black`}
+            >
               Load more
             </button>
           )}

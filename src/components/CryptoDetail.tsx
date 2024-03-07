@@ -27,14 +27,14 @@ const CryptoDetail = ({ id, web }: any) => {
   }, []);
   return (
     <>
-      <section className="flex justify-between items-center">
+      <section className="flex justify-between items-center text-black">
         <section className="flex gap-3">
           <Image
             src={`https://s2.coinmarketcap.com/static/img/coins/64x64/${id}.png`}
             alt="logo"
-            width={45}
-            height={45}
-            className="w-24 h-24 rounded-full"
+            width={30}
+            height={30}
+            className="w-16 h-16 rounded-full"
           />
           <section className="flex flex-col gap-2 mt-2">
             <section className="flex gap-2 text-3xl">
@@ -91,7 +91,9 @@ const CryptoDetail = ({ id, web }: any) => {
         {menuDetail.map((menu) => {
           return (
             <button
-              className={`capitalize ${isActive === menu ? "font-bold" : ""}`}
+              className={`capitalize text-black ${
+                isActive === menu ? "font-bold" : ""
+              }`}
               onClick={() => setIsActive(menu)}
             >
               {menu}
@@ -114,7 +116,7 @@ export default CryptoDetail;
 
 const MenuActive = ({ title }: { title: string }) => {
   return (
-    <section className="text-sm">
+    <section className="text-sm text-black">
       {title === "description" && (
         <section>
           <h5 className="font-bold">What is Bitcoin?</h5>

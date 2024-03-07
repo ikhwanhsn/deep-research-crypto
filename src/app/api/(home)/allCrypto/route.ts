@@ -6,6 +6,7 @@ export const GET = async () => {
       headers: {
         "X-CMC_PRO_API_KEY": process.env.NEXT_PUBLIC_API_KEY_CMC || "",
       },
+      cache: "no-store",
     }
   );
   const result = await res.json();
