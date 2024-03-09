@@ -8,6 +8,7 @@ import { FaTelegramPlane } from "react-icons/fa";
 import { SiCoinmarketcap } from "react-icons/si";
 import coinGecko from "../../public/img/coingecko.png";
 import Image from "next/image";
+import { formatCryptoNumber } from "@/services/formatCrypto";
 
 const menuDetail = ["description", "tokenomics", "research", "others"];
 
@@ -27,30 +28,53 @@ const CryptoDetail = ({ id, web }: any) => {
   }, []);
   return (
     <>
-      <section className="flex justify-between items-center text-black">
-        <section className="flex gap-3">
-          <Image
-            src={`https://s2.coinmarketcap.com/static/img/coins/64x64/${id}.png`}
-            alt="logo"
-            width={30}
-            height={30}
-            className="w-16 h-16 rounded-full"
-          />
+      <section className="flex justify-between items-center text-black -mt-3">
+        <section className="flex gap-5 items-center">
+          <section>
+            <Image
+              src={`https://s2.coinmarketcap.com/static/img/coins/64x64/${id}.png`}
+              alt="logo"
+              width={60}
+              height={60}
+              className="rounded-full mt-3"
+            />
+          </section>
           <section className="flex flex-col gap-2 mt-2">
             <section className="flex gap-2 text-3xl">
               <h3>{cryptoData?.name}</h3>
               <p className="opacity-50">{cryptoData?.symbol}</p>
             </section>
-            <section className="flex gap-3 items-center">
-              <a href="" target="_blank">
-                <TbWorld className="scale-[1.5] hover:scale-[1.6]" />
-              </a>
-              <a href="" target="_blank">
-                <FaXTwitter className="scale-[1.4] hover:scale-[1.5]" />
-              </a>
-              <a href="" target="_blank">
-                <FaTelegramPlane className="scale-[1.5] hover:scale-[1.6]" />
-              </a>
+            <section className="flex gap-3 items-center ml-1">
+              {web.website &&
+                web.website.map((item: any, index: any) => {
+                  if (index === 0) {
+                    return (
+                      <a href={item} key={index} target="_blank">
+                        <TbWorld className="scale-[1.5] hover:scale-[1.6]" />
+                      </a>
+                    );
+                  }
+                })}
+              {web.twitter &&
+                web.twitter.map((item: any, index: any) => {
+                  if (index === 0) {
+                    return (
+                      <a href={item} key={index} target="_blank">
+                        <FaXTwitter className="scale-[1.4] hover:scale-[1.5]" />
+                      </a>
+                    );
+                  }
+                })}
+              {web.chat &&
+                web.chat.map((item: any, index: any) => {
+                  if (index === 0) {
+                    return (
+                      <a href={item} key={index} target="_blank">
+                        <FaTelegramPlane className="scale-[1.5] hover:scale-[1.6]" />
+                      </a>
+                    );
+                  }
+                })}
               <a
                 href={`https://coinmarketcap.com/id/currencies/${cryptoData?.name.replace(
                   /\s+/g,
@@ -79,11 +103,43 @@ const CryptoDetail = ({ id, web }: any) => {
           </section>
         </section>
         <section className="flex flex-col gap-2 items-center justify-center">
-          <h3 className="text-4xl">{cryptoData?.quote.USD.price}</h3>
+          <h3
+            className={`text-4xl pt-5 ${
+              cryptoData?.quote.USD.percent_change_24h < 0
+                ? "text-red-500"
+                : "text-green-500"
+            }`}
+          >
+            ${formatCryptoNumber(Number(cryptoData?.quote.USD.price))}
+          </h3>
           <section className="flex gap-1">
-            <p>{cryptoData?.quote.USD.percent_change_1h}%</p>
-            <p>{cryptoData?.quote.USD.percent_change_24h}%</p>
-            <p>{cryptoData?.quote.USD.percent_change_7d}%</p>
+            <p
+              className={`${
+                cryptoData?.quote.USD.percent_change_1h > 0
+                  ? "text-green-500"
+                  : "text-red-500"
+              }`}
+            >
+              {cryptoData?.quote.USD.percent_change_1h.toFixed(2)}%
+            </p>
+            <p
+              className={`${
+                cryptoData?.quote.USD.percent_change_24h > 0
+                  ? "text-green-500"
+                  : "text-red-500"
+              }`}
+            >
+              {cryptoData?.quote.USD.percent_change_24h.toFixed(2)}%
+            </p>
+            <p
+              className={`${
+                cryptoData?.quote.USD.percent_change_7d > 0
+                  ? "text-green-500"
+                  : "text-red-500"
+              }`}
+            >
+              {cryptoData?.quote.USD.percent_change_7d.toFixed(2)}%
+            </p>
           </section>
         </section>
       </section>
@@ -172,7 +228,7 @@ const MenuActive = ({ title }: { title: string }) => {
           <section className="mt-3 flex gap-14">
             <div
               className="radial-progress scale-[1.5] my-5 ml-12 bg-gray-100 text-gray-700 border-4 border-gray-200"
-              style={{ "--value": 70 }}
+              style={{ "--value": 70 } as React.CSSProperties}
               role="progressbar"
             >
               70%

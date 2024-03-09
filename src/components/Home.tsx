@@ -105,9 +105,22 @@ const HomeComponent = () => {
         })}
       </section>
       <section className="card w-1/2 bg-white p-3 mb-3 flex gap-1 shadow-sm">
-        {isLoading && <p className="text-center">Loading...</p>}
         {dataNotFound && isActive === "all" && (
           <p className="text-center">Data not found</p>
+        )}
+        {isActive === "all" && isLoading && (
+          <>
+            <section className="w-full h-14 animate-pulse mb-1 bg-gray-200 rounded-2xl"></section>
+            <section className="w-full h-14 animate-pulse mb-1 bg-gray-200 rounded-2xl"></section>
+            <section className="w-full h-14 animate-pulse mb-1 bg-gray-200 rounded-2xl"></section>
+            <section className="w-full h-14 animate-pulse mb-1 bg-gray-200 rounded-2xl"></section>
+            <section className="w-full h-14 animate-pulse mb-1 bg-gray-200 rounded-2xl"></section>
+            <section className="w-full h-14 animate-pulse mb-1 bg-gray-200 rounded-2xl"></section>
+            <section className="w-full h-14 animate-pulse mb-1 bg-gray-200 rounded-2xl"></section>
+            <section className="w-full h-14 animate-pulse mb-1 bg-gray-200 rounded-2xl"></section>
+            <section className="w-full h-14 animate-pulse mb-1 bg-gray-200 rounded-2xl"></section>
+            <section className="w-full h-14 animate-pulse mb-1 bg-gray-200 rounded-2xl"></section>
+          </>
         )}
         {isActive === "all" && !dataNotFound && (
           <CardHome

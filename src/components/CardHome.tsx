@@ -1,5 +1,6 @@
 "use client";
 
+import { formatCryptoNumber } from "@/services/formatCrypto";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 
@@ -63,25 +64,15 @@ const CryptoCard = ({
         <p className="opacity-50">{symbol}</p>
       </section>
       <section className="flex gap-2 text-black">
-        <p>${roundNumber(Number(price))}</p>
+        <p>${formatCryptoNumber(Number(price))}</p>
         <p
           className={`${
             Number(change) < 0 ? "text-red-500" : "text-green-500"
           }`}
         >
-          {roundNumber(Number(change))}%
+          {Number(change).toFixed(2)}%
         </p>
       </section>
     </section>
   );
-};
-
-const roundNumber = (number: number) => {
-  // if (number < 0.0001) {
-  //   return Math.round(number * 10000000) / 10000000;
-  // }
-  if (number < 1) {
-    return Math.round(number * 10000) / 10000;
-  }
-  return Math.round(number * 100) / 100;
 };
