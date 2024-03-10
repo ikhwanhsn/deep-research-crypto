@@ -1,6 +1,7 @@
-export const GET = async () => {
+export const GET = async (request: Request, { params }: any) => {
+  const { limit } = params;
   const res = await fetch(
-    `https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest?start=1&limit=25`,
+    `https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest?start=1&limit=${limit}`,
     {
       method: "GET",
       headers: {

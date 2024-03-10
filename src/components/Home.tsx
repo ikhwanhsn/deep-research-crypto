@@ -20,37 +20,39 @@ const homeMenu = [
 
 const HomeComponent = () => {
   const router = useRouter();
+  const [limit, setLimit] = useState(25);
   const [isActive, setIsActive] = useState("all");
   const [dataCrypto, setDataCrypto] = useState<any>([]);
   const [dataFilter, setDataFilter] = useState<any>([]);
   const [allCrypto, setAllCrypto] = useState([]);
   const [dataNotFound, setDataNotFound] = useState(false);
-  const { data, error, isLoading } = useSWR("/api/allTab", fetcher);
+  const { data, error, isLoading } = useSWR(`/api/allTab/${limit}`, fetcher);
   useEffect(() => {
     if (data) {
-      setDataCrypto([...dataCrypto, ...data.data]);
+      setDataCrypto([...data.data]);
+      // setDataCrypto([...dataCrypto, ...data.data]);
     }
   }, [data]);
   useEffect(() => {
     const getData = async () => {
       const res = await fetch("http://localhost:3000/api/allCrypto");
       const data = await res.json();
-      console.log(data.cryptoName);
+      // console.log(data.cryptoName);
       setAllCrypto(data.cryptoName);
     };
     getData();
   }, []);
-  const handleInput = (e: any) => {
-    const filter = dataCrypto.filter((crypto: any) => {
-      return crypto.name.toLowerCase().includes(e.target.value.toLowerCase());
-    });
-    if (filter.length === 0) {
-      setDataNotFound(true);
-    } else {
-      setDataNotFound(false);
-    }
-    setDataFilter(filter);
-  };
+  // const handleInput = (e: any) => {
+  //   const filter = dataCrypto.filter((crypto: any) => {
+  //     return crypto.name.toLowerCase().includes(e.target.value.toLowerCase());
+  //   });
+  //   if (filter.length === 0) {
+  //     setDataNotFound(true);
+  //   } else {
+  //     setDataNotFound(false);
+  //   }
+  //   setDataFilter(filter);
+  // };
 
   const handleSubmit = (e: any) => {
     e.preventDefault();
@@ -62,6 +64,10 @@ const HomeComponent = () => {
     const cryptoID = filter[0].id;
     console.log(filter[0]);
     router.push(`/crypto/detail/${cryptoID}`);
+  };
+
+  const handleLoadmore = () => {
+    setLimit(limit + 25);
   };
 
   return (
@@ -134,16 +140,14 @@ const HomeComponent = () => {
         {isActive === "watchlist" && <CoomingSoon />}
         {isActive === "new" && <CoomingSoon />}
         {isActive === "support" && <Support />}
-        {dataCrypto.length > 0 &&
-          !isLoading &&
-          !dataNotFound &&
-          isActive === "all" && (
-            <button
-              className={`btn btn-sm w-28 mt-2 mx-auto text-white bg-black`}
-            >
-              Load more
-            </button>
-          )}
+        {dataCrypto.length > 0 && isActive === "all" && (
+          <button
+            onClick={handleLoadmore}
+            className={`btn btn-sm w-28 mt-2 mx-auto text-white bg-black`}
+          >
+            {isLoading ? "Loading..." : "Load more"}
+          </button>
+        )}
       </section>
     </section>
   );
