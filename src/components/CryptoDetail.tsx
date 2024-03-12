@@ -46,6 +46,9 @@ const CryptoDetail = ({ id, web }: any) => {
                 <section className="flex gap-2 text-3xl">
                   <h3>{cryptoData?.name}</h3>
                   <p className="opacity-50">{cryptoData?.symbol}</p>
+                  <p className="opacity-50 text-base">
+                    #{cryptoData?.cmc_rank}
+                  </p>
                 </section>
                 <section className="flex gap-3 items-center ml-1">
                   {web.website &&
